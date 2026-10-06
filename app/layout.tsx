@@ -28,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <footer>
           <strong>Called It</strong>
           <span>Say it before it happens.</span>
+          <span className="footerLinks"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
           <span>© {new Date().getFullYear()}</span>
         </footer>
       </body>
