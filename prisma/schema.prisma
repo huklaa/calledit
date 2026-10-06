@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PredictionStatus {
+  PENDING
+  CORRECT
+  WRONG
+  VOID
+}
+
+enum PaymentStatus {
+  FREE
+  PENDING
+  PAID
+  REFUNDED
+}
+
+model Prediction {
+  id              String           @id @default(cuid())
+  number          Int              @unique @default(autoincrement())
+  text            String
+  category        String
+  creatorHandle   String
+  creatorName     String?
+  resolutionDate  DateTime
+  createdAt       DateTime         @default(now())
+  status          PredictionStatus @default(PENDING)
+  paymentStatus   PaymentStatus    @default(FREE)
+  proofHash       String           @unique
+  stripeSessionId String?          @unique
+  evidenceUrl     String?
+  resolutionNote  String?
+  resolvedAt      DateTime?
+
+  @@index([createdAt])
+  @@index([category])
+  @@index([creatorHandle])
+  @@index([status])
+}
