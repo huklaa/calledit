@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ id: prediction.id, number: prediction.number });
     }
 
-    if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_PRICE_ID) {
+    if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
       await db.prediction.delete({ where: { id: prediction.id } });
       return NextResponse.json({ error: "Payments are not configured yet." }, { status: 503 });
     }
@@ -51,9 +51,10 @@ export async function POST(request: Request) {
     const origin = process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
+      payment_method_types: ["card"],
+      line_items: [{ price_data: { currency: "usd", unit_amount: 100, product_data: { name: `Called It prediction #${prediction.number}`, description: "Public prediction proof after confirmed payment" } }, quantity: 1 }],
       metadata: { predictionId: prediction.id },
-      success_url: `${origin}/p/${prediction.number}?paid=1`,
+      success_url: `${origin}/payment/status?prediction=${prediction.number}`,
       cancel_url: `${origin}/new?cancelled=1`,
     });
 
