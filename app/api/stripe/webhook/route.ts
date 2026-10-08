@@ -24,10 +24,10 @@ export async function POST(request: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const predictionId = session.metadata?.predictionId;
-    if (predictionId) {
-      await db.prediction.update({
-        where: { id: predictionId },
-        data: { paymentStatus: "PAID", stripeSessionId: session.id },
+    if (predictionId && session.payment_status === "paid") {
+      await db.prediction.updateMany({
+        where: { id: predictionId, stripeSessionId: session.id, paymentStatus: "PENDING" },
+        data: { paymentStatus: "PAID" },
       });
     }
   }

@@ -16,7 +16,7 @@ Called It is a timestamped prediction platform. Users publish a prediction, choo
 - Optional paid verification / paid prediction flow
 - Responsive dark-first UI
 - PostgreSQL-ready data model
-- Stripe-ready payments
+- Fixed $1 USD Stripe Checkout (card, no wallet required)
 - Domain planned: `calledit.it`
 
 ## Stack
@@ -36,7 +36,7 @@ npm run db:push
 npm run dev
 ```
 
-The app can boot without Stripe configured. Publishing paid predictions is disabled until Stripe environment variables are present.
+For $1 USD paid predictions, set `NEXT_PUBLIC_REQUIRE_PAYMENT=true` and configure `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and the `/api/stripe/webhook` endpoint in Stripe. Payment is verified by the webhook before a prediction becomes public. Without Stripe keys, paid prediction creation returns an error rather than publishing for free. For the planned OpenSea / Base NFT alternative, see `docs/OPENSEA-BASE-INTEGRATION.md`; NFT mint checkout is not yet implemented.
 
 ## Product principle
 

@@ -80,10 +80,10 @@ export default function PredictionForm() {
 
       {error && <div className="error">{error}</div>}
       <button className="button" type="submit" disabled={busy}>
-        {busy ? "Locking…" : "Lock prediction"}
+        {busy ? "Continuing…" : "Continue to payment · $1"}
       </button>
       <span className="hint">
-        Beta can run free. Paid verification can be enabled with one environment flag.
+        One prediction costs $1 USD when payments are enabled. Pay securely by card; no crypto wallet connection is required. Your prediction becomes public only after payment is confirmed.
       </span>
     </form>
   );
